@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TCPClient")]
+[assembly: AssemblyTitle("Lab03_Bai06")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TCPClient")]
+[assembly: AssemblyProduct("Lab03_Bai06")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("85c912c3-26b8-4f5c-92bb-334652c668a2")]
+[assembly: Guid("cde114a3-429e-420e-97ea-a76938bbfc09")]
 
 // Version information for an assembly consists of the following four values:
 //
