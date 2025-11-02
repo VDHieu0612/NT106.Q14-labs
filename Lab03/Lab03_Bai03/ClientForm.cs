@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Lab03_Bai03
 {
@@ -29,18 +23,18 @@ namespace Lab03_Bai03
         {
             try
             {
-                // 1. Tạo đối tượng TcpClient
+                // Tạo đối tượng TcpClient
                 tcpClient = new TcpClient();
 
-                // 2. Kết nối đến Server với địa chỉ và port xác định
+                // Kết nối đến Server với địa chỉ và port xác định
                 IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
                 IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 8080);
                 tcpClient.Connect(ipEndPoint);
 
-                // 3. Lấy luồng để đọc và ghi dữ liệu
+                // Lấy luồng để đọc và ghi dữ liệu
                 ns = tcpClient.GetStream();
 
-                // 4. Gửi thông điệp đầu tiên đến Server
+                // Gửi thông điệp đầu tiên đến Server
                 Byte[] data = Encoding.ASCII.GetBytes("This is Lab03\n");
                 ns.Write(data, 0, data.Length);
 
@@ -66,7 +60,6 @@ namespace Lab03_Bai03
                 // Kiểm tra kết nối
                 if (tcpClient != null && tcpClient.Connected && ns != null)
                 {
-                    // Lấy nội dung từ rtbContent
                     string message = rtbContent.Text.Trim();
 
                     if (string.IsNullOrEmpty(message))
@@ -106,7 +99,7 @@ namespace Lab03_Bai03
             {
                 if (tcpClient != null && tcpClient.Connected)
                 {
-                    // 5. Gửi lệnh "quit" để thông báo ngắt kết nối
+                    // Gửi lệnh "quit" để thông báo ngắt kết nối
                     Byte[] data = Encoding.ASCII.GetBytes("quit\n");
                     ns.Write(data, 0, data.Length);
 
