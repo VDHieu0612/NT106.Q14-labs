@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Lab03_Bai05
@@ -12,44 +13,41 @@ namespace Lab03_Bai05
         private TcpClient client;
         private NetworkStream stream;
         private const int PORT = 8888;
-        private string serverIpAddress; 
+        private string serverIpAddress;
 
-        // Constructor mới nhận IP từ Form Menu
         public ClientForm(string serverIp)
         {
             InitializeComponent();
-            this.serverIpAddress = serverIp; 
+            this.serverIpAddress = serverIp;
+            this.FormClosing += ClientForm_FormClosing;
         }
 
-        private void ClientForm_Load(object sender, EventArgs e)
+        private async void ClientForm_Load(object sender, EventArgs e)
         {
-            ConnectToServer();
+            await ConnectToServerAsync();
             if (client != null && client.Connected)
             {
-                RequestAllDishes();
+                await RequestAllDishesAsync();
             }
         }
 
-        // SỬA ĐỔI QUAN TRỌNG: KHÔNG TỰ ĐỘNG ĐÓNG FORM KHI LỖI
-        private void ConnectToServer()
+        private async Task ConnectToServerAsync()
         {
             try
             {
                 client = new TcpClient();
-                client.Connect(this.serverIpAddress, PORT);
+                await client.ConnectAsync(this.serverIpAddress, PORT);
                 stream = client.GetStream();
                 this.Text = $"CLIENT - Đã kết nối tới {serverIpAddress}";
             }
             catch (Exception ex)
             {
-                // Thay vì this.Close(), ta hiện lỗi và vô hiệu hóa giao diện
-                MessageBox.Show($"Không thể kết nối đến server: {ex.Message}\n\nVui lòng kiểm tra lại IP Server và Tường lửa.", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Không thể kết nối đến server: {ex.Message}", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DisableAllControls();
             }
         }
-        
-        // SỬA ĐỔI QUAN TRỌNG: KHÔNG TỰ ĐỘNG ĐÓNG FORM KHI LỖI
-        private string SendRequestAndGetResponse(string request)
+
+        private async Task<string> SendRequestAndGetResponseAsync(string request)
         {
             if (client == null || !client.Connected)
             {
@@ -58,36 +56,70 @@ namespace Lab03_Bai05
             }
             try
             {
-                byte[] requestBytes = Encoding.UTF8.GetBytes(request);
-                stream.Write(requestBytes, 0, requestBytes.Length);
+                await SendMessageAsync(stream, request);
+                string response = await ReadMessageAsync(stream);
 
-                byte[] buffer = new byte[8192 * 2];
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                return Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                if (response == null) throw new IOException("Server đã đóng kết nối.");
+
+                return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Thay vì this.Close(), ta hiện lỗi và vô hiệu hóa giao diện
-                MessageBox.Show("Mất kết nối với server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Mất kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DisableAllControls();
                 return "ERROR|Mất kết nối";
             }
         }
 
-        // Hàm mới để vô hiệu hóa các control khi không kết nối được
+        #region Message Framing Helpers
+        private async Task SendMessageAsync(NetworkStream stream, string message)
+        {
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+            byte[] lengthBytes = BitConverter.GetBytes(messageBytes.Length);
+            await stream.WriteAsync(lengthBytes, 0, 4);
+            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+        }
+
+        private async Task<string> ReadMessageAsync(NetworkStream stream)
+        {
+            byte[] lengthBuffer = new byte[4];
+            int bytesRead = await ReadExactlyAsync(stream, lengthBuffer, 4);
+            if (bytesRead < 4) return null;
+
+            int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
+
+            byte[] messageBuffer = new byte[messageLength];
+            bytesRead = await ReadExactlyAsync(stream, messageBuffer, messageLength);
+            if (bytesRead < messageLength) return null;
+
+            return Encoding.UTF8.GetString(messageBuffer);
+        }
+
+        private async Task<int> ReadExactlyAsync(NetworkStream stream, byte[] buffer, int bytesToRead)
+        {
+            int totalBytesRead = 0;
+            while (totalBytesRead < bytesToRead)
+            {
+                int bytesRead = await stream.ReadAsync(buffer, totalBytesRead, bytesToRead - totalBytesRead);
+                if (bytesRead == 0) break;
+                totalBytesRead += bytesRead;
+            }
+            return totalBytesRead;
+        }
+        #endregion
+
+        #region Event Handlers (Unchanged Logic, just async calls)
+        private void ClientForm_FormClosing(object sender, FormClosingEventArgs e) { stream?.Close(); client?.Close(); }
+
         private void DisableAllControls()
         {
-            foreach (Control control in this.Controls)
-            {
-                control.Enabled = false;
-            }
+            foreach (Control control in this.Controls) { control.Enabled = false; }
             this.Text += " - (Đã mất kết nối)";
         }
-        
-        #region Unchanged Code (Các hàm này giữ nguyên)
-        private void RequestAllDishes()
+
+        private async Task RequestAllDishesAsync()
         {
-            string response = SendRequestAndGetResponse("GET_ALL_DISHES");
+            string response = await SendRequestAndGetResponseAsync("GET_ALL_DISHES");
             if (response.StartsWith("ERROR")) return;
             string[] responseParts = response.Split('|');
             if (responseParts[0] == "ALL_DISHES")
@@ -106,7 +138,8 @@ namespace Lab03_Bai05
                 }
             }
         }
-        private void btnThemMon_Click(object sender, EventArgs e)
+
+        private async void btnThemMon_Click(object sender, EventArgs e)
         {
             string tenMon = IntxtTenMonAn.Text.Trim();
             string nguoiDongGop = IntxtTenNguoiDongGop.Text.Trim();
@@ -118,18 +151,19 @@ namespace Lab03_Bai05
             }
             string imageBase64 = Convert.ToBase64String(File.ReadAllBytes(hinhAnhPath));
             string request = $"ADD_DISH|{tenMon}|{nguoiDongGop}|{imageBase64}";
-            string response = SendRequestAndGetResponse(request);
+            string response = await SendRequestAndGetResponseAsync(request);
             if (response.StartsWith("ERROR")) return;
             string[] responseParts = response.Split('|');
             MessageBox.Show(responseParts[1]);
             if (responseParts[0] == "ADD_SUCCESS")
             {
-                RequestAllDishes();
+                await RequestAllDishesAsync();
             }
         }
-        private void btnChonMon_Click(object sender, EventArgs e)
+
+        private async void btnChonMon_Click(object sender, EventArgs e)
         {
-            string response = SendRequestAndGetResponse("GET_RANDOM_DISH");
+            string response = await SendRequestAndGetResponseAsync("GET_RANDOM_DISH");
             if (response.StartsWith("ERROR")) return;
             string[] responseParts = response.Split('|');
             if (responseParts[0] == "RANDOM_DISH")
@@ -140,7 +174,7 @@ namespace Lab03_Bai05
                 if (!string.IsNullOrEmpty(imageBase64))
                 {
                     byte[] imageBytes = Convert.FromBase64String(imageBase64);
-                    using (var ms = new System.IO.MemoryStream(imageBytes))
+                    using (var ms = new MemoryStream(imageBytes))
                     {
                         picAnhMonAn.Image = Image.FromStream(ms);
                     }
@@ -149,6 +183,7 @@ namespace Lab03_Bai05
             }
             else { MessageBox.Show(responseParts[1]); }
         }
+
         private void btnChonAnh_Click(object sender, EventArgs e)
         {
             using (var ofd = new OpenFileDialog())
@@ -156,7 +191,7 @@ namespace Lab03_Bai05
                 ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    IntxtFileAnh.Text = System.IO.Path.GetFileName(ofd.FileName);
+                    IntxtFileAnh.Text = Path.GetFileName(ofd.FileName);
                     IntxtFileAnh.Tag = ofd.FileName;
                 }
             }

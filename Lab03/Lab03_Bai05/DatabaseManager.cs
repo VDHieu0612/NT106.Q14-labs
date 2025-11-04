@@ -14,6 +14,7 @@ namespace Lab03_Bai05
 
         public void InitializeDatabase()
         {
+            
             if (!File.Exists(dbPath))
             {
                 SQLiteConnection.CreateFile(dbPath);

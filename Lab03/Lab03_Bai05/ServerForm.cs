@@ -1,30 +1,30 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace Lab03_Bai05
 {
     public partial class ServerForm : Form
     {
         private DatabaseManager dbManager;
+        private TcpListener serverListener;
 
         public ServerForm()
         {
             InitializeComponent();
+            this.FormClosing += ServerForm_FormClosing;
         }
 
         private void ServerForm_Load(object sender, EventArgs e)
         {
             dbManager = new DatabaseManager();
             dbManager.InitializeDatabase();
-            Thread serverThread = new Thread(StartServer);
-            serverThread.IsBackground = true;
-            serverThread.Start();
+            _ = StartServerAsync();
         }
 
         private void LogMessage(string message)
@@ -34,42 +34,39 @@ namespace Lab03_Bai05
                 txtLog.Invoke(new Action<string>(LogMessage), message);
                 return;
             }
-            txtLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}\n");
+            txtLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}");
         }
 
-        private void StartServer()
+        private async Task StartServerAsync()
         {
-            TcpListener serverListener = new TcpListener(IPAddress.Any, 8888);
+            serverListener = new TcpListener(IPAddress.Any, 8888);
             try
             {
                 serverListener.Start();
-                LogMessage("Server đã khởi động tại 127.0.0.1:8888");
+                LogMessage("Server đã khởi động tại 127.0.0.1:8888 và đang lắng nghe...");
                 while (true)
                 {
-                    TcpClient connectedClient = serverListener.AcceptTcpClient();
-                    LogMessage("Một Client đã kết nối!");
-                    Thread clientThread = new Thread(() => HandleClient(connectedClient));
-                    clientThread.IsBackground = true;
-                    clientThread.Start();
+                    TcpClient connectedClient = await serverListener.AcceptTcpClientAsync();
+                    LogMessage($"Một Client đã kết nối từ {connectedClient.Client.RemoteEndPoint}");
+                    _ = HandleClientAsync(connectedClient);
                 }
             }
-            catch (Exception ex)
-            {
-                LogMessage($"Lỗi nghiêm trọng của Server: {ex.Message}");
-            }
+            catch (ObjectDisposedException) { LogMessage("Server đã dừng."); }
+            catch (Exception ex) { LogMessage($"Lỗi nghiêm trọng của Server: {ex.Message}"); }
         }
 
-        private void HandleClient(TcpClient tcpClient)
+        private async Task HandleClientAsync(TcpClient tcpClient)
         {
+            string clientEndPoint = tcpClient.Client.RemoteEndPoint.ToString();
             try
             {
                 using (NetworkStream clientStream = tcpClient.GetStream())
                 {
-                    byte[] buffer = new byte[8192 * 2];
-                    int bytesRead;
-                    while ((bytesRead = clientStream.Read(buffer, 0, buffer.Length)) != 0)
+                    while (true)
                     {
-                        string request = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        string request = await ReadMessageAsync(clientStream);
+                        if (request == null) break; // Client đã ngắt kết nối
+
                         string[] requestParts = request.Split('|');
                         string command = requestParts[0];
                         string response = "";
@@ -101,14 +98,59 @@ namespace Lab03_Bai05
                                 catch (Exception ex) { response = $"ERROR|{ex.Message}"; }
                                 break;
                         }
-                        byte[] responseBytes = Encoding.UTF8.GetBytes(response);
-                        clientStream.Write(responseBytes, 0, responseBytes.Length);
+                        await SendMessageAsync(clientStream, response);
                     }
                 }
             }
-            catch { LogMessage("Một Client đã ngắt kết nối."); }
-            finally { tcpClient.Close(); }
+            catch (Exception ex)
+            {
+                LogMessage($"Lỗi khi xử lý client {clientEndPoint}: {ex.Message}");
+            }
+            finally
+            {
+                LogMessage($"Client {clientEndPoint} đã ngắt kết nối.");
+                tcpClient.Close();
+            }
         }
+
+        #region Message Framing Helpers
+        private async Task SendMessageAsync(NetworkStream stream, string message)
+        {
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+            byte[] lengthBytes = BitConverter.GetBytes(messageBytes.Length);
+            await stream.WriteAsync(lengthBytes, 0, 4);
+            await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+        }
+
+        private async Task<string> ReadMessageAsync(NetworkStream stream)
+        {
+            byte[] lengthBuffer = new byte[4];
+            int bytesRead = await ReadExactlyAsync(stream, lengthBuffer, 4);
+            if (bytesRead < 4) return null;
+
+            int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
+
+            byte[] messageBuffer = new byte[messageLength];
+            bytesRead = await ReadExactlyAsync(stream, messageBuffer, messageLength);
+            if (bytesRead < messageLength) return null;
+
+            return Encoding.UTF8.GetString(messageBuffer);
+        }
+
+        private async Task<int> ReadExactlyAsync(NetworkStream stream, byte[] buffer, int bytesToRead)
+        {
+            int totalBytesRead = 0;
+            while (totalBytesRead < bytesToRead)
+            {
+                int bytesRead = await stream.ReadAsync(buffer, totalBytesRead, bytesToRead - totalBytesRead);
+                if (bytesRead == 0) break;
+                totalBytesRead += bytesRead;
+            }
+            return totalBytesRead;
+        }
+        #endregion
+
+        private void ServerForm_FormClosing(object sender, FormClosingEventArgs e) { serverListener?.Stop(); }
 
         private string GetImageAsBase64(string relativePath)
         {
@@ -124,7 +166,7 @@ namespace Lab03_Bai05
             string fileName = $"{Guid.NewGuid()}.jpg";
             string fullPath = Path.Combine(imageDirectory, fileName);
             File.WriteAllBytes(fullPath, imageBytes);
-            return Path.Combine("images", fileName);
+            return fullPath; // Lưu đường dẫn tuyệt đối để GetImageAsBase64 có thể đọc được
         }
     }
 }

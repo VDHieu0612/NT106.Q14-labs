@@ -38,7 +38,8 @@ namespace Lab03_Bai05
             string serverIp = txtServerIp.Text.Trim();
             if (string.IsNullOrEmpty(serverIp))
             {
-                MessageBox.Show("Vui lòng nhập địa chỉ IP của Server!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Su dung IP co dinh: " + "127.0.0.1" );
+                serverIp = "127.0.0.1";
                 return;
             }
 
