@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace Lab03_Bai05
@@ -10,7 +10,6 @@ namespace Lab03_Bai05
         public Lab03_Bai05()
         {
             InitializeComponent();
-            this.Text = "Bảng Điều Khiển";
         }
 
         private void btnTaoServer_Click(object sender, EventArgs e)
@@ -18,7 +17,8 @@ namespace Lab03_Bai05
             if (serverInstance == null)
             {
                 serverInstance = new ServerForm();
-                serverInstance.FormClosed += (s, args) => {
+                serverInstance.FormClosed += (s, args) =>
+                {
                     serverInstance = null;
                     if (!this.IsDisposed)
                     {
@@ -32,16 +32,24 @@ namespace Lab03_Bai05
             }
         }
 
+        // SỬA ĐỔI QUAN TRỌNG: Lấy IP từ TextBox và truyền vào Client
         private void btnTaoClient_Click(object sender, EventArgs e)
         {
+            string serverIp = txtServerIp.Text.Trim();
+            if (string.IsNullOrEmpty(serverIp))
+            {
+                MessageBox.Show("Vui lòng nhập địa chỉ IP của Server!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (serverInstance != null && !serverInstance.IsDisposed)
             {
-                ClientForm newClient = new ClientForm();
+                ClientForm newClient = new ClientForm(serverIp);
                 newClient.Show();
             }
             else
             {
-                MessageBox.Show("Vui lòng khởi động Server trước khi tạo Client!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng khởi động Server trước khi tạo Client!", "Server chưa chạy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }
