@@ -41,17 +41,9 @@ namespace Lab03_Bai05
                 MessageBox.Show("Su dung IP co dinh: " + "127.0.0.1" );
                 serverIp = "127.0.0.1";
                 return;
-            }
-
-            if (serverInstance != null && !serverInstance.IsDisposed)
-            {
+            }      
                 ClientForm newClient = new ClientForm(serverIp);
                 newClient.Show();
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng khởi động Server trước khi tạo Client!", "Server chưa chạy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
         }
     }
 }
