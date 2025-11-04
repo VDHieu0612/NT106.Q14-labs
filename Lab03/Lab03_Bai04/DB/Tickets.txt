@@ -1,7 +1,0 @@
-Đào, phở và piano|1|A1|hh|40000
-Mai|2|A1|Hiếu|100000
-Mai|2|A2|Hiếu|100000
-Mai|2|A3|Hiếu|100000
-Mai|2|B1|Hiếu|100000
-Mai|2|B3|Hello|100000
-Mai|3|A1|Hiếu|100000
