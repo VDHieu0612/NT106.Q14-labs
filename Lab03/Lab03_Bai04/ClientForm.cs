@@ -34,7 +34,6 @@ namespace Lab03_Bai04
             selectedSeats = new List<string>();
             InitializeSeatButtons();
             DisableControls();
-            txtServerIP.Text = "192.168.1.190";
         }
 
         private void InitializeSeatButtons()

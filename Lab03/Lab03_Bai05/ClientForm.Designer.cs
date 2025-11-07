@@ -48,18 +48,21 @@ namespace Lab03_Bai05
             this.grThemMonAn.Controls.Add(this.lbFileAnh);
             this.grThemMonAn.Controls.Add(this.lbTenNguoiDongGop);
             this.grThemMonAn.Controls.Add(this.lbTenMonAn);
-            this.grThemMonAn.Location = new System.Drawing.Point(12, 12);
+            this.grThemMonAn.Location = new System.Drawing.Point(18, 19);
+            this.grThemMonAn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grThemMonAn.Name = "grThemMonAn";
-            this.grThemMonAn.Size = new System.Drawing.Size(434, 241);
+            this.grThemMonAn.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grThemMonAn.Size = new System.Drawing.Size(651, 377);
             this.grThemMonAn.TabIndex = 0;
             this.grThemMonAn.TabStop = false;
             this.grThemMonAn.Text = "Thêm món ăn";
             // 
             // btnChonAnh
             // 
-            this.btnChonAnh.Location = new System.Drawing.Point(344, 131);
+            this.btnChonAnh.Location = new System.Drawing.Point(516, 205);
+            this.btnChonAnh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnChonAnh.Name = "btnChonAnh";
-            this.btnChonAnh.Size = new System.Drawing.Size(75, 23);
+            this.btnChonAnh.Size = new System.Drawing.Size(112, 36);
             this.btnChonAnh.TabIndex = 7;
             this.btnChonAnh.Text = "Chọn...";
             this.btnChonAnh.UseVisualStyleBackColor = true;
@@ -67,18 +70,20 @@ namespace Lab03_Bai05
             // 
             // IntxtFileAnh
             // 
-            this.IntxtFileAnh.Location = new System.Drawing.Point(163, 132);
+            this.IntxtFileAnh.Location = new System.Drawing.Point(244, 206);
+            this.IntxtFileAnh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IntxtFileAnh.Name = "IntxtFileAnh";
             this.IntxtFileAnh.ReadOnly = true;
-            this.IntxtFileAnh.Size = new System.Drawing.Size(175, 22);
+            this.IntxtFileAnh.Size = new System.Drawing.Size(260, 31);
             this.IntxtFileAnh.TabIndex = 7;
             // 
             // btnThemMon
             // 
             this.btnThemMon.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThemMon.Location = new System.Drawing.Point(163, 178);
+            this.btnThemMon.Location = new System.Drawing.Point(244, 278);
+            this.btnThemMon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnThemMon.Name = "btnThemMon";
-            this.btnThemMon.Size = new System.Drawing.Size(256, 45);
+            this.btnThemMon.Size = new System.Drawing.Size(384, 70);
             this.btnThemMon.TabIndex = 6;
             this.btnThemMon.Text = "Thêm Món";
             this.btnThemMon.UseVisualStyleBackColor = true;
@@ -86,42 +91,47 @@ namespace Lab03_Bai05
             // 
             // IntxtTenNguoiDongGop
             // 
-            this.IntxtTenNguoiDongGop.Location = new System.Drawing.Point(163, 86);
+            this.IntxtTenNguoiDongGop.Location = new System.Drawing.Point(244, 134);
+            this.IntxtTenNguoiDongGop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IntxtTenNguoiDongGop.Name = "IntxtTenNguoiDongGop";
-            this.IntxtTenNguoiDongGop.Size = new System.Drawing.Size(256, 22);
+            this.IntxtTenNguoiDongGop.Size = new System.Drawing.Size(382, 31);
             this.IntxtTenNguoiDongGop.TabIndex = 4;
             // 
             // IntxtTenMonAn
             // 
-            this.IntxtTenMonAn.Location = new System.Drawing.Point(163, 37);
+            this.IntxtTenMonAn.Location = new System.Drawing.Point(244, 58);
+            this.IntxtTenMonAn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.IntxtTenMonAn.Name = "IntxtTenMonAn";
-            this.IntxtTenMonAn.Size = new System.Drawing.Size(256, 22);
+            this.IntxtTenMonAn.Size = new System.Drawing.Size(382, 31);
             this.IntxtTenMonAn.TabIndex = 3;
             // 
             // lbFileAnh
             // 
             this.lbFileAnh.AutoSize = true;
-            this.lbFileAnh.Location = new System.Drawing.Point(17, 137);
+            this.lbFileAnh.Location = new System.Drawing.Point(26, 214);
+            this.lbFileAnh.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbFileAnh.Name = "lbFileAnh";
-            this.lbFileAnh.Size = new System.Drawing.Size(54, 16);
+            this.lbFileAnh.Size = new System.Drawing.Size(91, 25);
             this.lbFileAnh.TabIndex = 2;
             this.lbFileAnh.Text = "File Ảnh";
             // 
             // lbTenNguoiDongGop
             // 
             this.lbTenNguoiDongGop.AutoSize = true;
-            this.lbTenNguoiDongGop.Location = new System.Drawing.Point(17, 89);
+            this.lbTenNguoiDongGop.Location = new System.Drawing.Point(26, 139);
+            this.lbTenNguoiDongGop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbTenNguoiDongGop.Name = "lbTenNguoiDongGop";
-            this.lbTenNguoiDongGop.Size = new System.Drawing.Size(126, 16);
+            this.lbTenNguoiDongGop.Size = new System.Drawing.Size(204, 25);
             this.lbTenNguoiDongGop.TabIndex = 1;
             this.lbTenNguoiDongGop.Text = "Tên người đóng góp";
             // 
             // lbTenMonAn
             // 
             this.lbTenMonAn.AutoSize = true;
-            this.lbTenMonAn.Location = new System.Drawing.Point(17, 40);
+            this.lbTenMonAn.Location = new System.Drawing.Point(26, 62);
+            this.lbTenMonAn.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbTenMonAn.Name = "lbTenMonAn";
-            this.lbTenMonAn.Size = new System.Drawing.Size(82, 16);
+            this.lbTenMonAn.Size = new System.Drawing.Size(126, 25);
             this.lbTenMonAn.TabIndex = 0;
             this.lbTenMonAn.Text = "Tên món ăn";
             // 
@@ -131,9 +141,10 @@ namespace Lab03_Bai05
             this.columnHeader1,
             this.columnHeader2});
             this.lsVCacMonAn.HideSelection = false;
-            this.lsVCacMonAn.Location = new System.Drawing.Point(452, 21);
+            this.lsVCacMonAn.Location = new System.Drawing.Point(678, 33);
+            this.lsVCacMonAn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lsVCacMonAn.Name = "lsVCacMonAn";
-            this.lsVCacMonAn.Size = new System.Drawing.Size(434, 232);
+            this.lsVCacMonAn.Size = new System.Drawing.Size(796, 360);
             this.lsVCacMonAn.TabIndex = 1;
             this.lsVCacMonAn.UseCompatibleStateImageBehavior = false;
             this.lsVCacMonAn.View = System.Windows.Forms.View.Details;
@@ -154,53 +165,60 @@ namespace Lab03_Bai05
             this.grHomNayAnGi.Controls.Add(this.OutxtTenNguoiDongGop);
             this.grHomNayAnGi.Controls.Add(this.OutLbTenMonAN);
             this.grHomNayAnGi.Controls.Add(this.OutLbTenNguoiDongGop);
-            this.grHomNayAnGi.Location = new System.Drawing.Point(12, 313);
+            this.grHomNayAnGi.Location = new System.Drawing.Point(18, 489);
+            this.grHomNayAnGi.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grHomNayAnGi.Name = "grHomNayAnGi";
-            this.grHomNayAnGi.Size = new System.Drawing.Size(434, 198);
+            this.grHomNayAnGi.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grHomNayAnGi.Size = new System.Drawing.Size(651, 309);
             this.grHomNayAnGi.TabIndex = 2;
             this.grHomNayAnGi.TabStop = false;
             this.grHomNayAnGi.Text = "Hôm nay ăn gì?";
             // 
             // OutxtTenMonAn
             // 
-            this.OutxtTenMonAn.Location = new System.Drawing.Point(163, 114);
+            this.OutxtTenMonAn.Location = new System.Drawing.Point(244, 178);
+            this.OutxtTenMonAn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.OutxtTenMonAn.Name = "OutxtTenMonAn";
             this.OutxtTenMonAn.ReadOnly = true;
-            this.OutxtTenMonAn.Size = new System.Drawing.Size(256, 22);
+            this.OutxtTenMonAn.Size = new System.Drawing.Size(382, 31);
             this.OutxtTenMonAn.TabIndex = 5;
             // 
             // OutxtTenNguoiDongGop
             // 
-            this.OutxtTenNguoiDongGop.Location = new System.Drawing.Point(163, 64);
+            this.OutxtTenNguoiDongGop.Location = new System.Drawing.Point(244, 100);
+            this.OutxtTenNguoiDongGop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.OutxtTenNguoiDongGop.Name = "OutxtTenNguoiDongGop";
             this.OutxtTenNguoiDongGop.ReadOnly = true;
-            this.OutxtTenNguoiDongGop.Size = new System.Drawing.Size(256, 22);
+            this.OutxtTenNguoiDongGop.Size = new System.Drawing.Size(382, 31);
             this.OutxtTenNguoiDongGop.TabIndex = 3;
             // 
             // OutLbTenMonAN
             // 
             this.OutLbTenMonAN.AutoSize = true;
-            this.OutLbTenMonAN.Location = new System.Drawing.Point(15, 117);
+            this.OutLbTenMonAN.Location = new System.Drawing.Point(22, 183);
+            this.OutLbTenMonAN.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.OutLbTenMonAN.Name = "OutLbTenMonAN";
-            this.OutLbTenMonAN.Size = new System.Drawing.Size(82, 16);
+            this.OutLbTenMonAN.Size = new System.Drawing.Size(126, 25);
             this.OutLbTenMonAN.TabIndex = 2;
             this.OutLbTenMonAN.Text = "Tên món ăn";
             // 
             // OutLbTenNguoiDongGop
             // 
             this.OutLbTenNguoiDongGop.AutoSize = true;
-            this.OutLbTenNguoiDongGop.Location = new System.Drawing.Point(15, 67);
+            this.OutLbTenNguoiDongGop.Location = new System.Drawing.Point(22, 105);
+            this.OutLbTenNguoiDongGop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.OutLbTenNguoiDongGop.Name = "OutLbTenNguoiDongGop";
-            this.OutLbTenNguoiDongGop.Size = new System.Drawing.Size(126, 16);
+            this.OutLbTenNguoiDongGop.Size = new System.Drawing.Size(204, 25);
             this.OutLbTenNguoiDongGop.TabIndex = 0;
             this.OutLbTenNguoiDongGop.Text = "Tên người đóng góp";
             // 
             // btnChonMon
             // 
             this.btnChonMon.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChonMon.Location = new System.Drawing.Point(12, 260);
+            this.btnChonMon.Location = new System.Drawing.Point(18, 406);
+            this.btnChonMon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnChonMon.Name = "btnChonMon";
-            this.btnChonMon.Size = new System.Drawing.Size(434, 47);
+            this.btnChonMon.Size = new System.Drawing.Size(651, 73);
             this.btnChonMon.TabIndex = 6;
             this.btnChonMon.Text = "Tìm Món Ăn Ngẫu Nhiên";
             this.btnChonMon.UseVisualStyleBackColor = true;
@@ -209,23 +227,25 @@ namespace Lab03_Bai05
             // picAnhMonAn
             // 
             this.picAnhMonAn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picAnhMonAn.Location = new System.Drawing.Point(452, 260);
+            this.picAnhMonAn.Location = new System.Drawing.Point(678, 406);
+            this.picAnhMonAn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picAnhMonAn.Name = "picAnhMonAn";
-            this.picAnhMonAn.Size = new System.Drawing.Size(434, 251);
+            this.picAnhMonAn.Size = new System.Drawing.Size(796, 391);
             this.picAnhMonAn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picAnhMonAn.TabIndex = 7;
             this.picAnhMonAn.TabStop = false;
             // 
             // ClientForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 523);
+            this.ClientSize = new System.Drawing.Size(1506, 817);
             this.Controls.Add(this.picAnhMonAn);
             this.Controls.Add(this.btnChonMon);
             this.Controls.Add(this.grHomNayAnGi);
             this.Controls.Add(this.lsVCacMonAn);
             this.Controls.Add(this.grThemMonAn);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ClientForm";
             this.Text = "Client";
             this.Load += new System.EventHandler(this.ClientForm_Load);
@@ -235,6 +255,7 @@ namespace Lab03_Bai05
             this.grHomNayAnGi.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAnhMonAn)).EndInit();
             this.ResumeLayout(false);
+
         }
         #endregion
         private System.Windows.Forms.GroupBox grThemMonAn;

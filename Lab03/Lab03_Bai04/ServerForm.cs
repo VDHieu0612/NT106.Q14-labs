@@ -37,7 +37,7 @@ namespace Lab03_Bai04
             LoadTicketsFromFile();
             if (movieRooms.Count == 0)
             {
-                MessageBox.Show("Không có dữ liệu phim! Vui lòng kiểm tra file Movies.txt.", "Lỗi");
+                MessageBox.Show("Không có dữ liệu phim! Vui lòng kiểm tra file Movies.txt và thiết lập 'Copy to Output Directory'.", "Lỗi");
                 return;
             }
             listenThread = new Thread(StartListening);
@@ -72,33 +72,50 @@ namespace Lab03_Bai04
         {
             try
             {
-                string filePath = "D:\\LTM\\Thực hành\\Group06-NT106.Q14-labs\\Lab03\\Lab03_Bai04\\DB\\Movies.txt";
+                string filePath = "Data\\Movies.txt";
                 if (!File.Exists(filePath))
                 {
                     UpdateLog($"ERROR: File {filePath} không tồn tại!\r\n");
-                    MessageBox.Show($"Không tìm thấy file {filePath}!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Không tìm thấy file {filePath}! Vui lòng đảm bảo file tồn tại và đã được set 'Copy to Output Directory'.", "Lỗi File", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
                 movieRooms.Clear();
                 string[] lines = File.ReadAllLines(filePath);
+
                 foreach (string line in lines)
                 {
                     if (string.IsNullOrWhiteSpace(line)) continue;
+
                     string[] parts = line.Split('|');
                     if (parts.Length < 3) continue;
+
                     string movieName = parts[0].Trim();
                     double basePrice = double.Parse(parts[1].Trim());
                     string[] rooms = parts[2].Split(',');
+
                     movieRooms[movieName] = new List<Room>();
+
                     foreach (string roomName in rooms)
                     {
                         var room = new Room { RoomName = roomName.Trim(), MovieName = movieName, BasePrice = basePrice, Tickets = new List<Ticket>() };
                         string[] rows = { "A", "B", "C" };
-                        for (int i = 0; i < rows.Length; i++)
+
+                        foreach (var row in rows)
                         {
-                            for (int j = 1; j <= 5; j++)
+                            for (int i = 1; i <= 5; i++)
                             {
-                                room.Tickets.Add(new Ticket { SeatNumber = $"{rows[i]}{j}", IsBooked = false, Price = basePrice });
+                                string seatNum = $"{row}{i}";
+
+                                // TÍNH GIÁ VÉ**
+                                double ticketPrice = CalculatePrice(seatNum, basePrice);
+
+                                room.Tickets.Add(new Ticket
+                                {
+                                    SeatNumber = seatNum,
+                                    IsBooked = false,
+                                    Price = ticketPrice
+                                });
                             }
                         }
                         movieRooms[movieName].Add(room);
@@ -116,7 +133,7 @@ namespace Lab03_Bai04
         {
             try
             {
-                string filePath = "D:\\LTM\\Thực hành\\Group06-NT106.Q14-labs\\Lab03\\Lab03_Bai04\\DB\\Tickets.txt";
+                string filePath = "Data\\Tickets.txt";
                 if (!File.Exists(filePath))
                 {
                     UpdateLog($"INFO: File tickets không tồn tại (sẽ tạo mới khi có đặt vé)\r\n");
@@ -133,7 +150,6 @@ namespace Lab03_Bai04
                     string roomName = parts[1].Trim();
                     string seatNumber = parts[2].Trim();
                     string customerName = parts[3].Trim();
-                    double? savedPrice = parts.Length >= 5 ? double.Parse(parts[4].Trim()) : (double?)null;
                     var room = GetRoom(movieName, roomName);
                     if (room != null)
                     {
@@ -143,7 +159,6 @@ namespace Lab03_Bai04
                             ticket.IsBooked = true;
                             ticket.CustomerName = customerName;
                             ticket.BookedTime = DateTime.Now;
-                            if (savedPrice.HasValue) { ticket.Price = savedPrice.Value; }
                             bookedCount++;
                         }
                     }
@@ -160,7 +175,7 @@ namespace Lab03_Bai04
         {
             try
             {
-                string filePath = "D:\\LTM\\Thực hành\\Group06-NT106.Q14-labs\\Lab03\\Lab03_Bai04\\DB\\Tickets.txt";
+                string filePath = "Data\\Tickets.txt";
                 List<string> lines = new List<string>();
                 lock (lockObj)
                 {
@@ -210,7 +225,7 @@ namespace Lab03_Bai04
                             stats += $"   └─ {room.RoomName}: {roomBooked}/{roomTotal} ghế - Doanh thu: {roomRevenue:N0}đ\n";
                         }
                         totalRevenue += movieRevenue;
-                        stats += $"   ➤ Tổng phim: {movieBooked}/{movieTotal} ghế - Doanh thu: {movieRevenue:N0}đ\n\n";
+                        stats += $"   ➤ Tổng ghế đặt: {movieBooked}/{movieTotal} ghế - Doanh thu: {movieRevenue:N0}đ\n\n";
                     }
                     stats += $"========================================\n💰 TỔNG DOANH THU: {totalRevenue:N0}đ";
                     MessageBox.Show(stats, "Thống kê đặt vé");
@@ -264,7 +279,7 @@ namespace Lab03_Bai04
                 }
             }
             catch (IOException) { /* Client disconnected gracefully */ }
-            catch (Exception) { /* Other errors */ }
+            catch (Exception ex) { UpdateLog($"[{clientEndPoint}] An unexpected error occurred: {ex.Message}\r\n"); }
             finally
             {
                 lock (lockObj) { connectedClients.Remove(client); }
@@ -312,6 +327,28 @@ namespace Lab03_Bai04
         #endregion
 
         #region Helpers & UI
+
+        /// <summary>
+        /// Hàm tính giá vé
+        /// </summary>
+        private double CalculatePrice(string seatNumber, double basePrice)
+        {
+            List<string> veVot = new List<string> { "A1", "A5", "C1", "C5" };
+            List<string> veVip = new List<string> { "B2", "B3", "B4" };
+
+            if (veVot.Contains(seatNumber))
+            {
+                return basePrice / 4.0;
+            }
+
+            if (veVip.Contains(seatNumber))
+            {
+                return basePrice * 2.0;
+            }
+
+            return basePrice;
+        }
+
         private Room GetRoom(string movieName, string roomName)
         {
             return movieRooms.ContainsKey(movieName) ? movieRooms[movieName].FirstOrDefault(r => r.RoomName == roomName) : null;
@@ -329,46 +366,24 @@ namespace Lab03_Bai04
 
         private void UpdateLog(string message)
         {
-            if (rtbLog.InvokeRequired)
-            {
-                rtbLog.Invoke(new Action(() =>
-                {
-                    rtbLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}");
-                    rtbLog.ScrollToCaret();
-                }));
-            }
-            else
-            {
-                rtbLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}");
-                rtbLog.ScrollToCaret();
-            }
+            if (rtbLog.InvokeRequired) rtbLog.Invoke(new Action(() => { rtbLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}"); rtbLog.ScrollToCaret(); }));
+            else { rtbLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}"); rtbLog.ScrollToCaret(); }
         }
 
         private void UpdateServerIP(string text)
         {
-            if (lblServerIP.InvokeRequired)
-            {
-                lblServerIP.Invoke(new Action(() => lblServerIP.Text = text));
-            }
-            else
-            {
-                lblServerIP.Text = text;
-            }
+            if (lblServerIP.InvokeRequired) lblServerIP.Invoke(new Action(() => lblServerIP.Text = text));
+            else lblServerIP.Text = text;
         }
 
         private void UpdateClientCount()
         {
-            if (lblClientCount.InvokeRequired)
-            {
-                lblClientCount.Invoke(new Action(() => lblClientCount.Text = $"Connected Clients: {connectedClients.Count}"));
-            }
-            else
-            {
-                lblClientCount.Text = $"Connected Clients: {connectedClients.Count}";
-            }
+            if (lblClientCount.InvokeRequired) lblClientCount.Invoke(new Action(() => lblClientCount.Text = $"Connected Clients: {connectedClients.Count}"));
+            else lblClientCount.Text = $"Connected Clients: {connectedClients.Count}";
         }
 
         private void ServerForm_FormClosing(object sender, FormClosingEventArgs e) => btnStop_Click(null, null);
+
         #endregion
     }
 }

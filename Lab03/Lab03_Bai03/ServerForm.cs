@@ -17,6 +17,7 @@ namespace Lab03_Bai03
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            btnStop.Enabled = false;
         }
 
         private void btnListen_Click(object sender, EventArgs e)
