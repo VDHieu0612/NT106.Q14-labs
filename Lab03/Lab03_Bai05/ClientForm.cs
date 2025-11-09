@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,6 +39,8 @@ namespace Lab03_Bai05
                 client = new TcpClient();
                 await client.ConnectAsync(this.serverIpAddress, PORT);
                 stream = client.GetStream();
+                stream.ReadTimeout = 5000;  // 5000ms = 5 giây
+                stream.WriteTimeout = 5000; // 5000ms = 5 giây
                 this.Text = $"CLIENT - Đã kết nối tới {serverIpAddress}";
             }
             catch (Exception ex)
@@ -54,20 +57,62 @@ namespace Lab03_Bai05
                 DisableAllControls();
                 return "ERROR|Mất kết nối";
             }
-            try
-            {
-                await SendMessageAsync(stream, request);
-                string response = await ReadMessageAsync(stream);
+            //try
+            //{
+            //    await SendMessageAsync(stream, request);
+            //    string response = await ReadMessageAsync(stream);
 
-                if (response == null) throw new IOException("Server đã đóng kết nối.");
+            //    if (response == null) throw new IOException("Server đã đóng kết nối.");
 
-                return response;
-            }
-            catch (Exception ex)
+            //    return response;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Mất kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    DisableAllControls();
+            //    return "ERROR|Mất kết nối";
+            //}
+
+            // Sử dụng CancellationTokenSource để tạo timeout 5 giây
+            using (var cts = new CancellationTokenSource(5000))
             {
-                MessageBox.Show($"Mất kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DisableAllControls();
-                return "ERROR|Mất kết nối";
+                try
+                {
+                    // Gửi tin nhắn với CancellationToken
+                    byte[] messageBytes = Encoding.UTF8.GetBytes(request);
+                    byte[] lengthBytes = BitConverter.GetBytes(messageBytes.Length);
+
+                    // Chú ý việc thêm cts.Token vào các lời gọi Async
+                    await stream.WriteAsync(lengthBytes, 0, 4, cts.Token);
+                    await stream.WriteAsync(messageBytes, 0, messageBytes.Length, cts.Token);
+
+                    // Đọc tin nhắn với CancellationToken
+                    byte[] lengthBuffer = new byte[4];
+                    await stream.ReadAsync(lengthBuffer, 0, 4, cts.Token);
+                    int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
+
+                    byte[] messageBuffer = new byte[messageLength];
+                    await stream.ReadAsync(messageBuffer, 0, messageLength, cts.Token);
+
+                    string response = Encoding.UTF8.GetString(messageBuffer);
+
+                    if (response == null) throw new IOException("Server đã đóng kết nối.");
+
+                    return response;
+                }
+                // Bắt lỗi khi timeout xảy ra
+                catch (OperationCanceledException)
+                {
+                    MessageBox.Show("Không nhận được phản hồi từ server (hết thời gian chờ).", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DisableAllControls();
+                    return "ERROR|Timeout";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Mất kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DisableAllControls();
+                    return "ERROR|Mất kết nối";
+                }
             }
         }
 

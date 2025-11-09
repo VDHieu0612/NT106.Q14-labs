@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,6 +14,7 @@ namespace Lab03_Bai05
     {
         private DatabaseManager dbManager;
         private TcpListener serverListener;
+        private readonly List<TcpClient> connectedClients = new List<TcpClient>();
 
         public ServerForm()
         {
@@ -47,6 +49,11 @@ namespace Lab03_Bai05
                 while (true)
                 {
                     TcpClient connectedClient = await serverListener.AcceptTcpClientAsync();
+                    // THÊM CLIENT VÀO DANH SÁCH
+                    lock (connectedClients)
+                    {
+                        connectedClients.Add(connectedClient);
+                    }
                     LogMessage($"Một Client đã kết nối từ {connectedClient.Client.RemoteEndPoint}");
                     _ = HandleClientAsync(connectedClient);
                 }
@@ -109,6 +116,10 @@ namespace Lab03_Bai05
             finally
             {
                 LogMessage($"Client {clientEndPoint} đã ngắt kết nối.");
+                lock (connectedClients)
+                {
+                    connectedClients.Remove(tcpClient);
+                }
                 tcpClient.Close();
             }
         }
@@ -150,7 +161,18 @@ namespace Lab03_Bai05
         }
         #endregion
 
-        private void ServerForm_FormClosing(object sender, FormClosingEventArgs e) { serverListener?.Stop(); }
+        private void ServerForm_FormClosing(object sender, FormClosingEventArgs e) {
+            serverListener?.Stop();
+            lock (connectedClients)
+            {
+                foreach (var client in connectedClients)
+                {
+                    client.Close(); // Lệnh này sẽ gửi tín hiệu đóng kết nối đến client
+                }
+                connectedClients.Clear();
+            }
+            LogMessage("Đã đóng tất cả các kết nối và dừng server.");
+        }
 
         private string GetImageAsBase64(string relativePath)
         {

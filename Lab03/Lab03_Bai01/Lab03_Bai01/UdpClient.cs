@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 
-// Đảm bảo namespace đúng như yêu cầu
 namespace Lab03_Bai01
 {
     public partial class UdpClient : Form
