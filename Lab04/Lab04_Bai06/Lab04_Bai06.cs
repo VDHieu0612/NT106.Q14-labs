@@ -30,9 +30,19 @@ namespace Lab04_Bai06
             string accessToken = richTextBox1.Text.Trim();
 
             // Kiểm tra điền đầy đủ thông tin chưa
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(tokenType) || string.IsNullOrEmpty(accessToken))
+            if (string.IsNullOrEmpty(url))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ URL, Token Type và Token!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập đầy đủ URL", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrEmpty(tokenType))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ Token Type", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if ( string.IsNullOrEmpty(accessToken))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ Token", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -50,10 +60,10 @@ namespace Lab04_Bai06
                     // Đọc nội dung trả về
                     string responseString = await response.Content.ReadAsStringAsync();
 
-                    // Kiểm tra nếu gọi thành công
-                    MessageBox.Show("Lấy thông tin người dùng thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (response.IsSuccessStatusCode)
                     {
+                        // Kiểm tra nếu gọi thành công
+                        MessageBox.Show("Lấy thông tin người dùng thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         // Parse JSON dữ liệu trả về
                         // Sử dụng JObject để linh hoạt truy xuất dữ liệu
                         JObject userData = JObject.Parse(responseString);
