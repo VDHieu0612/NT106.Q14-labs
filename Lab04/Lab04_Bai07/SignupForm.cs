@@ -39,7 +39,7 @@ namespace Lab04_Bai07
 
             // 2. Kiểm tra định dạng Email (Ví dụ: abc@gmail.com)
             string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            if (!Regex.IsMatch(txtEmail.Text, emailPattern))
+            if (!Regex.IsMatch(txtEmail.Text.Trim(), emailPattern))
             {
                 MessageBox.Show("Email không hợp lệ! Vui lòng kiểm tra lại.", "Lỗi định dạng");
                 txtEmail.Focus();
@@ -149,6 +149,11 @@ namespace Lab04_Bai07
         }
 
         private void SignupForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
