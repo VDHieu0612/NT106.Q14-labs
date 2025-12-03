@@ -41,4 +41,25 @@ namespace HomNayAnGi.Models
         public string language { get; set; }
         public string phone { get; set; }
     }
+
+    // Class đại diện cho 1 lỗi nhỏ bên trong (loc, msg, type)
+    public class ValidationErrorDetail
+    {
+        // loc là mảng hỗn hợp (chuỗi và số), nên dùng List<object>
+        public List<object> loc { get; set; }
+        public string msg { get; set; }
+        public string type { get; set; }
+    }
+
+    // Class đại diện cho cục JSON to chứa danh sách lỗi
+    public class ApiValidationError
+    {
+        public List<ValidationErrorDetail> detail { get; set; }
+    }
+
+    // Class phụ: Dùng cho trường hợp lỗi đơn giản (chỉ có dòng thông báo)
+    public class SimpleApiError
+    {
+        public string detail { get; set; }
+    }
 }

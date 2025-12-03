@@ -29,6 +29,12 @@ namespace HomNayAnGi.Services
             _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }
 
+
+
+
+
+
+
         public async Task<FoodResponse> GetAllFoodAsync(int pageIndex, int pageSize)
         {
             string url = $"{_baseUrl}/api/v1/monan/all";
@@ -166,5 +172,9 @@ namespace HomNayAnGi.Services
         }
 
 
+
+
     }
+
+
 }
