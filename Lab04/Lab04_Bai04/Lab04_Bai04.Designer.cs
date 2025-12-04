@@ -32,6 +32,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
+            this.Bookbtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnGet
@@ -71,11 +72,23 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Phim đang chiếu";
             // 
+            // Bookbtn
+            // 
+            this.Bookbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Bookbtn.Location = new System.Drawing.Point(396, 20);
+            this.Bookbtn.Name = "Bookbtn";
+            this.Bookbtn.Size = new System.Drawing.Size(320, 51);
+            this.Bookbtn.TabIndex = 4;
+            this.Bookbtn.Text = "Đặt vé";
+            this.Bookbtn.UseVisualStyleBackColor = true;
+            this.Bookbtn.Click += new System.EventHandler(this.Bookbtn_Click);
+            // 
             // Lab04_Bai04
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1020, 735);
+            this.Controls.Add(this.Bookbtn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -93,6 +106,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button Bookbtn;
     }
 }
 

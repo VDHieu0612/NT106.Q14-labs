@@ -69,6 +69,12 @@
     <Compile Include="Chitietphim.Designer.cs">
       <DependentUpon>Chitietphim.cs</DependentUpon>
     </Compile>
+    <Compile Include="Datvephim.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Datvephim.Designer.cs">
+      <DependentUpon>Datvephim.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lab04_Bai04.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Chitietphim.resx">
       <DependentUpon>Chitietphim.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Datvephim.resx">
+      <DependentUpon>Datvephim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lab04_Bai04.resx">
       <DependentUpon>Lab04_Bai04.cs</DependentUpon>
