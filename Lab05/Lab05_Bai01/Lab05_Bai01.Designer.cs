@@ -28,106 +28,110 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSend = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.Fromtb = new System.Windows.Forms.TextBox();
+            this.Totb = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.Subtb = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.Contentrtb = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // button1
+            // btnSend
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(13, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(157, 85);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "SEND";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSend.Location = new System.Drawing.Point(689, 13);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(150, 91);
+            this.btnSend.TabIndex = 0;
+            this.btnSend.Text = "SEND";
+            this.btnSend.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(195, 13);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(66, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 25);
+            this.label1.Size = new System.Drawing.Size(85, 31);
             this.label1.TabIndex = 1;
             this.label1.Text = "From:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(195, 73);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(66, 73);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 25);
+            this.label2.Size = new System.Drawing.Size(54, 31);
             this.label2.TabIndex = 2;
             this.label2.Text = "To:";
             // 
-            // textBox1
+            // Fromtb
             // 
-            this.textBox1.Location = new System.Drawing.Point(269, 13);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(215, 31);
-            this.textBox1.TabIndex = 3;
+            this.Fromtb.Location = new System.Drawing.Point(201, 13);
+            this.Fromtb.Name = "Fromtb";
+            this.Fromtb.Size = new System.Drawing.Size(415, 31);
+            this.Fromtb.TabIndex = 3;
             // 
-            // textBox2
+            // Totb
             // 
-            this.textBox2.Location = new System.Drawing.Point(269, 67);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(215, 31);
-            this.textBox2.TabIndex = 4;
+            this.Totb.Location = new System.Drawing.Point(201, 73);
+            this.Totb.Name = "Totb";
+            this.Totb.Size = new System.Drawing.Size(415, 31);
+            this.Totb.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(43, 131);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(66, 125);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 25);
+            this.label3.Size = new System.Drawing.Size(113, 31);
             this.label3.TabIndex = 5;
             this.label3.Text = "Subject:";
             // 
-            // textBox3
+            // Subtb
             // 
-            this.textBox3.Location = new System.Drawing.Point(200, 125);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(540, 31);
-            this.textBox3.TabIndex = 6;
+            this.Subtb.Location = new System.Drawing.Point(200, 125);
+            this.Subtb.Name = "Subtb";
+            this.Subtb.Size = new System.Drawing.Size(639, 31);
+            this.Subtb.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(43, 180);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(66, 177);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 25);
+            this.label4.Size = new System.Drawing.Size(84, 31);
             this.label4.TabIndex = 7;
             this.label4.Text = "Body:";
             // 
-            // richTextBox1
+            // Contentrtb
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(200, 180);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(540, 368);
-            this.richTextBox1.TabIndex = 8;
-            this.richTextBox1.Text = "";
+            this.Contentrtb.Location = new System.Drawing.Point(200, 180);
+            this.Contentrtb.Name = "Contentrtb";
+            this.Contentrtb.Size = new System.Drawing.Size(639, 586);
+            this.Contentrtb.TabIndex = 8;
+            this.Contentrtb.Text = "";
             // 
             // Lab05_Bai01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 588);
-            this.Controls.Add(this.richTextBox1);
+            this.ClientSize = new System.Drawing.Size(889, 805);
+            this.Controls.Add(this.Contentrtb);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.Subtb);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.Totb);
+            this.Controls.Add(this.Fromtb);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSend);
             this.Name = "Lab05_Bai01";
             this.Text = "Lab05_Bai01";
             this.ResumeLayout(false);
@@ -137,15 +141,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox Fromtb;
+        private System.Windows.Forms.TextBox Totb;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox Subtb;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox Contentrtb;
     }
 }
 
