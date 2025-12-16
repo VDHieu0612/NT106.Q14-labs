@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using Org.BouncyCastle.Crypto.Macs;
+using System;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Lab05
 {
@@ -119,6 +120,11 @@ namespace Lab05
                 Subtb.Clear();
                 Contentrtb.Clear();
             }
+            catch (MailKit.Security.AuthenticationException)
+            {
+                MessageBox.Show("Sai App Password!", "Lỗi xác thực",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Có lỗi xảy ra khi gửi email:\n{ex.Message}",
@@ -135,30 +141,23 @@ namespace Lab05
         private void SendEmail(string smtpHost, int smtpPort, string username,
             string appPassword, string fromEmail, string toEmail, string subject, string body)
         {
-            // Tạo email message
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("", fromEmail));
-            message.To.Add(new MailboxAddress("", toEmail));
-            message.Subject = subject;
-
-            // Tạo body của email
-            var bodyBuilder = new BodyBuilder();
-            bodyBuilder.TextBody = body;
-            message.Body = bodyBuilder.ToMessageBody();
-
-            // Gửi email
             using (var client = new SmtpClient())
             {
-                // Kết nối tới Gmail SMTP server
                 client.Connect(smtpHost, smtpPort, SecureSocketOptions.SslOnConnect);
 
-                // Xác thực
                 client.Authenticate(username, appPassword);
 
-                // Gửi email
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = subject;
+
+                var bodyBuilder = new BodyBuilder();
+                bodyBuilder.TextBody = body;
+                message.Body = bodyBuilder.ToMessageBody();
+
                 client.Send(message);
 
-                // Ngắt kết nối
                 client.Disconnect(true);
             }
         }
